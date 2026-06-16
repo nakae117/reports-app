@@ -19,48 +19,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install pnpm (Opcional)
-        # El script revisará si tienes un archivo pnpm-lock.yaml
-        id: pnpm-check
-        run: |
-          if [ -f "pnpm-lock.yaml" ]; then
-            echo "use_pnpm=true" >> $GITHUB_OUTPUT
-          else
-            echo "use_pnpm=false" >> $GITHUB_OUTPUT
-          fi
-
       - name: Setup pnpm
-        if: steps.pnpm-check.outputs.use_pnpm == 'true'
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4 # Actualizado a v4 para evitar problemas de compatibilidad
         with:
-          version: 9 # Versión estable de pnpm
+          version: 9 # O la versión específica de pnpm que uses localmente
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: ${{ steps.pnpm-check.outputs.use_pnpm == 'true' && 'pnpm' || 'npm' }}
+          node-version: 22 # Cambiado a Node 22 para solucionar el warning de la imagen
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: |
-          if [ "${{ steps.pnpm-check.outputs.use_pnpm }}" = "true" ]; then
-            pnpm install
-          else
-            npm install
-          fi
+        # Agregamos --no-frozen-lockfile solo por si acaso hay discrepancias en el entorno de CI
+        run: pnpm install --no-frozen-lockfile 
 
       - name: Build Project
-        run: |
-          if [ "${{ steps.pnpm-check.outputs.use_pnpm }}" = "true" ]; then
-            pnpm build
-          else
-            npm run build
-          fi
+        run: pnpm build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist' # Vuetify y Vite compilan todo dentro de /dist
+          path: './dist'
 
       - name: Deploy to GitHub Pages
         id: deployment
