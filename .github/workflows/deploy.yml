@@ -34,7 +34,7 @@ jobs:
         run: pnpm install --no-frozen-lockfile --ignore-workspace
 
       - name: Build Project
-        run: pnpm build --ignore-workspace
+        run: pnpm build 
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
