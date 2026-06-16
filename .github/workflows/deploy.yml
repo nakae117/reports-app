@@ -19,20 +19,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4 # Actualizado a v4 para evitar problemas de compatibilidad
-        with:
-          version: 9 # O la versión específica de pnpm que uses localmente
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22 # Cambiado a Node 22 para solucionar el warning de la imagen
-          cache: 'pnpm'
+          node-version: 22
+
+      - name: Install pnpm
+        run: npm install -g pnpm@9
 
       - name: Install dependencies
-        # Agregamos --no-frozen-lockfile solo por si acaso hay discrepancias en el entorno de CI
-        run: pnpm install --no-frozen-lockfile 
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build Project
         run: pnpm build
