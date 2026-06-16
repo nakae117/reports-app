@@ -1,0 +1,67 @@
+name: Deploy Vue + Vuetify to Pages
+
+on:
+  push:
+    branches: 'main'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm (Opcional)
+        # El script revisará si tienes un archivo pnpm-lock.yaml
+        id: pnpm-check
+        run: |
+          if [ -f "pnpm-lock.yaml" ]; then
+            echo "use_pnpm=true" >> $GITHUB_OUTPUT
+          else
+            echo "use_pnpm=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup pnpm
+        if: steps.pnpm-check.outputs.use_pnpm == 'true'
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9 # Versión estable de pnpm
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: ${{ steps.pnpm-check.outputs.use_pnpm == 'true' && 'pnpm' || 'npm' }}
+
+      - name: Install dependencies
+        run: |
+          if [ "${{ steps.pnpm-check.outputs.use_pnpm }}" = "true" ]; then
+            pnpm install
+          else
+            npm install
+          fi
+
+      - name: Build Project
+        run: |
+          if [ "${{ steps.pnpm-check.outputs.use_pnpm }}" = "true" ]; then
+            pnpm build
+          else
+            npm run build
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist' # Vuetify y Vite compilan todo dentro de /dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
