@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ServerRequest from '../views/ServerRequest.vue'
+import ReviewResquest from '../views/ReviewResquest.vue'
+import ReportCompose from '../views/ReportCompose.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,6 +21,16 @@ const router = createRouter({
       path: '/server-request',
       name: 'ServerRequest',
       component: ServerRequest,
+    },
+    {
+      path: '/review-request',
+      name: 'ReviewResquest',
+      component: ReviewResquest,
+    },
+    {
+      path: '/report-compose',
+      name: 'ReportCompose',
+      component: ReportCompose,
     },
   ],
 })
