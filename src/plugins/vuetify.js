@@ -24,6 +24,11 @@ const VSelect = {
 	density: 'compact',
 };
 
+const VAutocomplete = {
+	variant: "outlined",
+	density: 'compact',
+};
+
 export default createVuetify({
 	components,
 	directives,
@@ -35,6 +40,7 @@ export default createVuetify({
 		VTextField,
 		VChip,
 		VSelect,
+		VAutocomplete,
 		VCardActions: {
 			VBtn,
 		},

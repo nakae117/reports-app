@@ -14,13 +14,6 @@
 				<v-col ref="copyTextContainer" cols="6">
 					<slot name="copiying" />
 				</v-col>
-
-				<v-col cols="12" v-if="copied">
-					<v-alert
-						type="success"
-						title="¡Copiado!"
-					/>
-				</v-col>
 			</v-row>
 		</v-card-text>
 
@@ -30,11 +23,29 @@
 			<v-btn 
 				color="primary" 
 				variant="elevated" 
-				prepend-icon="add"
+				prepend-icon="copy_all"
 				@click="copyText"
 			>
 				Copiar
 			</v-btn>
+
+			<v-snackbar
+				v-model="copied"
+				color="primary"
+				location="right"
+			>
+				¡Copiado!
+
+				<template v-slot:actions>
+					<v-btn
+						color="white"
+						variant="text"
+						@click="copied = false"
+					>
+						<v-icon icon="close" />
+					</v-btn>
+				</template>
+			</v-snackbar>
 		</v-card-actions>
 	</v-card>
 </template>
