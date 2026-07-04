@@ -1,5 +1,5 @@
 <template>
-	<v-card class="mx-auto" elevation="4">
+	<v-card class="mx-auto">
 		<v-card-item>
 			<v-card-title class="text-headline">Solicitud de Revisión</v-card-title>
 			<v-card-subtitle>Review Request</v-card-subtitle>

@@ -1,5 +1,9 @@
 <script setup>
+import { onMounted } from 'vue';
 import { RouterView } from 'vue-router';
+import { useConfigStore } from "@/stores/config";
+
+const configStore = useConfigStore();
 
 const items = [
 	{
@@ -22,7 +26,16 @@ const items = [
 		value: '/report-compose',
 		icon: 'checklist_rtl',
 	},
-]
+	{
+		title: 'Configuración',
+		value: '/config',
+		icon: 'settings',
+	},
+];
+
+onMounted(() => {
+	configStore.loadConfig();
+});
 </script>
 
 <template>
@@ -44,7 +57,7 @@ const items = [
 		</v-navigation-drawer>
 
 		<v-main class="bg-grey-lighten-3">
-			<v-container class="mt-5">
+			<v-container class="mt-5" fluid>
 				<RouterView />
 			</v-container>
 		</v-main>
