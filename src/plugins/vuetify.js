@@ -13,6 +13,10 @@ const VTextField = {
 	variant: "outlined",
 	density: "compact",
 };
+const VTextarea = {
+	variant: "outlined",
+	density: "compact",
+};
 
 const VChip = {
 	color: "primary",
@@ -38,6 +42,7 @@ export default createVuetify({
 		},
 		VBtn,
 		VTextField,
+		VTextarea,
 		VChip,
 		VSelect,
 		VAutocomplete,

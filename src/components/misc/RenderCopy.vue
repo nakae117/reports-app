@@ -59,8 +59,15 @@ const copied = ref(false);
 const copyText = async () => {
 	if (copyTextContainer.value) {
 		try {
-			const text = copyTextContainer.value.$el.innerText;
-			await navigator.clipboard.writeText(text);
+			const text = copyTextContainer.value.$el;
+			const htmlBlob = new Blob([text.innerHTML], { type: "text/html" });
+			const textBlob = new Blob([text.innerText], { type: "text/plain" });
+			const data = [new ClipboardItem({
+				"text/html": htmlBlob,
+				"text/plain": textBlob,
+			})];
+
+			await navigator.clipboard.write(data);
 			copied.value = true;
 			
 			setTimeout(() => {

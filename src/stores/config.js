@@ -16,7 +16,6 @@ export const useConfigStore = defineStore('config', {
 	actions: {
 		saveConfig() {
 			localStorage.setItem("config", JSON.stringify(this.form));
-			console.log("guardado")
 		},
 
 		loadConfig() {

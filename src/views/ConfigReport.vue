@@ -20,6 +20,10 @@ const dateFormats = computed(() => {
 			value: "yyyy-LL-dd",
 		},
 		{
+			name: "Mm dd, aaaa",
+			value: "LLL dd, yyyy",
+		},
+		{
 			name: "dd Mm aaaa",
 			value: "dd LLL yyyy",
 		},
