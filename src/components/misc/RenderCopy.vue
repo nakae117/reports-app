@@ -18,6 +18,8 @@
 		</v-card-text>
 
 		<v-card-actions>
+			<slot name="secondary-actions" />
+
 			<v-spacer />
 
 			<v-btn 
@@ -29,32 +31,18 @@
 				Copiar
 			</v-btn>
 
-			<v-snackbar
-				v-model="copied"
-				color="primary"
-				location="right"
-			>
-				¡Copiado!
-
-				<template v-slot:actions>
-					<v-btn
-						color="white"
-						variant="text"
-						@click="copied = false"
-					>
-						<v-icon icon="close" />
-					</v-btn>
-				</template>
-			</v-snackbar>
+			<slot name="actions" />
 		</v-card-actions>
 	</v-card>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { useNotifyStore } from "@/stores/notify";
+
+const notifyStore = useNotifyStore();
 
 const copyTextContainer = ref(null);
-const copied = ref(false);
 
 const copyText = async () => {
 	if (copyTextContainer.value) {
@@ -68,11 +56,8 @@ const copyText = async () => {
 			})];
 
 			await navigator.clipboard.write(data);
-			copied.value = true;
-			
-			setTimeout(() => {
-			copied.value = false;
-			}, 2000)
+
+			notifyStore.showNotify("¡Copiado!");
 		} catch (err) {
 			console.error('Error al copiar el texto: ', err);
 		}

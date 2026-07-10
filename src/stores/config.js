@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { useNotifyStore } from "./notify";
 
 const formDefault = {
 	user: "",
@@ -16,6 +17,9 @@ export const useConfigStore = defineStore('config', {
 	actions: {
 		saveConfig() {
 			localStorage.setItem("config", JSON.stringify(this.form));
+
+			const notifyStore = useNotifyStore();
+			notifyStore.showNotify("Configuración guardada exitósamente");
 		},
 
 		loadConfig() {
@@ -27,6 +31,9 @@ export const useConfigStore = defineStore('config', {
 		resetConfig() {
 			localStorage.removeItem("config");
 			Object.assign(this.form, formDefault);
+
+			const notifyStore = useNotifyStore();
+			notifyStore.showNotify("Configuración reseteada exitósamente");
 		},
 	},
 });

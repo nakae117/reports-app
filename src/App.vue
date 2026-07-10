@@ -2,6 +2,7 @@
 import { onMounted } from 'vue';
 import { RouterView } from 'vue-router';
 import { useConfigStore } from "@/stores/config";
+import Notify from "@/components/misc/Notify.vue";
 
 const configStore = useConfigStore();
 
@@ -61,5 +62,7 @@ onMounted(() => {
 				<RouterView />
 			</v-container>
 		</v-main>
+
+		<notify />
 	</v-app>
 </template>

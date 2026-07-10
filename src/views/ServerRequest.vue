@@ -4,19 +4,19 @@
 			<render-copy>
 				<template v-slot:form>
 					<v-text-field
-						v-model="clickUP"
+						v-model="form.clickUP"
 						label="ClickUP"
 						prepend-inner-icon="link"
 					/>
 
 					<v-text-field
-						v-model="from"
+						v-model="form.from"
 						label="Front"
 						prepend-inner-icon="link"
 					/>
 
 					<v-text-field
-						v-model="back"
+						v-model="form.back"
 						label="Back"
 						prepend-inner-icon="link"
 					/>
@@ -28,9 +28,9 @@
 					: <br><br>
 					
 					Solicitud de ambiente: <br>
-					ClickUP: <span :class="colorClickUP">{{ urlClickUP }}</span> <br>
-					Front: <span :class="colorFrom">{{ urlFrom }}</span> <br>
-					Back: <span :class="colorBack">{{ urlBack }}</span>
+					<text-view title="ClickUP" :text="form.clickUP" default-text="example.com" />
+					<text-view title="Front" :text="form.from" default-text="CU-XXXXXXX_XXXXX-XXXX" />
+					<text-view title="Back" :text="form.back" default-text="v100.example" />
 				</template>
 			</render-copy>
 		</v-col>
@@ -38,26 +38,11 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useServerRequestStore } from "@/stores/server-request";
 import RenderCopy from "@/components/misc/RenderCopy.vue";
+import TextView from "@/components/misc/TextView.vue";
 
-const clickUP = ref("");
-const from = ref("");
-const back = ref("v100");
-
-const urlClickUP = computed(() => clickUP.value !== "" ? clickUP.value : "example.com");
-const urlFrom = computed(() => from.value !== "" ? from.value : "CU-XXXXXXX_XXXXX-XXXX");
-const urlBack = computed(() => back.value !== "" ? back.value : "v100.example");
-
-const colorClickUP = computed(() => {
-	return { 'text-grey': urlClickUP.value === "example.com" };
-})
-
-const colorFrom = computed(() => {
-	return { 'text-grey': urlFrom.value === "CU-XXXXXXX_XXXXX-XXXX" };
-})
-
-const colorBack = computed(() => {
-	return { 'text-grey': urlBack.value === "v100.example" };
-})
+const serverRequestStore = useServerRequestStore();
+const { form } = storeToRefs(serverRequestStore);
 </script>

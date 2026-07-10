@@ -92,24 +92,6 @@ const dateNow = computed(() => {
 					>
 						Reset
 					</v-btn>
-
-					<!-- <v-snackbar
-						v-model="copied"
-						color="primary"
-						location="right"
-					>
-						¡Copiado!
-
-						<template v-slot:actions>
-							<v-btn
-								color="white"
-								variant="text"
-								@click="copied = false"
-							>
-								<v-icon icon="close" />
-							</v-btn>
-						</template>
-					</v-snackbar> -->
 				</v-card-actions>
 			</v-card>
 		</v-col>

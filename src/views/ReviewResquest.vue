@@ -58,11 +58,11 @@
 				<template v-slot:copiying>
 					<div>Buenas</div>
 					-<br>
-					
-					<div><b>Comentario:</b> <span :class="validateRequest.comment.class">{{ validateRequest.comment.text }}</span></div>
-					<div><b>Tarea:</b> <span :class="validateRequest.task.class">{{ validateRequest.task.text }}</span></div>
-					<div><b>Rama:</b> <span :class="validateRequest.branch.class">{{ validateRequest.branch.text }}</span></div>
-					<div><b>PR:</b> <span :class="validateRequest.pr.class">{{ validateRequest.pr.text }}</span></div>
+
+					<text-view title="Comentario" :text="form.comment" default-text="Lorem ipsum dolor sit amet consectetur adipisicing elit." />
+					<text-view title="Tarea" :text="form.task" default-text="https://app.website.com/H1232" />
+					<text-view title="Rama" :text="form.branch" default-text="CU-John-Doe-X0000" />
+					<text-view title="PR" :text="form.pr" default-text="https://github.com/repo/sitorio/pull/1" />
 					<div v-if="form.note.trim()"><b>Note:</b> {{ form.note }}</div><br>
 					
 					<div>{{ form.priority.icon }} {{ form.priority.text }}</div>
@@ -76,10 +76,11 @@
 import { storeToRefs } from 'pinia';
 import { useReviewRequestStore } from "@/stores/review-request";
 import RenderCopy from "@/components/misc/RenderCopy.vue";
+import TextView from "@/components/misc/TextView.vue";
 import { ref } from 'vue';
 
 const reviewRequestStore = useReviewRequestStore();
-const { form, validateRequest } = storeToRefs(reviewRequestStore);
+const { form } = storeToRefs(reviewRequestStore);
 
 const priorityOptions = ref([
 	{ text: "Baja", icon: "🟢" },
