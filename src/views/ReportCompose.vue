@@ -19,7 +19,7 @@ const date = computed(() => {
 });
 
 const statusIcons = ref(["🟢", "🔴", "🟠"]);
-const phases = ref(["🏗️ In progress"]);
+const phases = ref(["🏗️ In progress", "🏗️ Pending", "🏗️ Closed", "🏗️ Testing", "🏗️ Ready for QA"]);
 
 onMounted(() => {
 	reportComposeStore.loadDraft();
@@ -284,39 +284,51 @@ onMounted(() => {
 				<template v-slot:copiying>
 					<strong>Developer Daily Log</strong> 💻 <strong v-if="formConfig.user.trim()">{{ formConfig.user }}</strong><strong v-else class="text-grey">John Doe</strong> - {{ date }}<br><br>
 
-					<div v-if="formReport.tasks.length > 0">
-						<strong>TAREA:</strong>
-						<div v-for="(task, index) in formReport.tasks" :key="`task-div-${index}`">
-							- {{ task.code }} ➡️ Fase: {{ task.phase }} {{ task.progress }}% {{ task.status }} <span v-if="task.comment.trim()">| {{ task.comment }}</span>
-						</div>
-					</div><br>
+					<template v-if="formReport.tasks.length > 0">
+						<div>
+							<strong>TAREA:</strong>
+							<div v-for="(task, index) in formReport.tasks" :key="`task-div-${index}`">
+								- {{ task.code }} ➡️ Fase: {{ task.phase }} {{ task.progress }}% {{ task.status }} <span v-if="task.comment.trim()">| {{ task.comment }}</span>
+							</div>
+						</div><br>
+					</template>
 					
-					<div v-if="formReport.meetings.length > 0">
-						<strong>REUNIÓN:</strong>
-						<div v-for="(meet, index) in formReport.meetings" :key="`meet-div-${index}`">
-							- 🤝 {{ meet.reason }} <span v-if="meet.comment.trim()">| {{ meet.comment }}</span>
+					<template v-if="formReport.meetings.length > 0">
+						<div>
+							<strong>REUNIÓN:</strong>
+							<div v-for="(meet, index) in formReport.meetings" :key="`meet-div-${index}`">
+								- 🤝 {{ meet.reason }} <span v-if="meet.comment.trim()">| {{ meet.comment }}</span>
+							</div>
+						</div><br>
+					</template>
+
+					<template v-if="formReport.communications.length > 0">
+						<div>
+							<strong>COMUNICACIÓN:</strong>
+							<div v-for="(communication, index) in formReport.communications" :key="`communication-div-${index}`">
+								- 📞 {{ communication.reason }} <span v-if="communication.comment.trim()">| {{ communication.comment }}</span>
+							</div>
+						</div><br>
+					</template>
+
+					<template v-if="formReport.pr_today.trim()">
+						<div>
+							<strong>PR's revisados hoy:</strong>
+							<div>- {{ formReport.pr_today }}</div>
+						</div><br>
+					</template>
+
+					<template v-if="formReport.pr_month.trim()">
+						<div>
+							<strong>PR's revisados del mes:</strong> {{ formReport.pr_month }}
+						</div><br>
+					</template>
+
+					<template v-if="formReport.comment.trim()">
+						<div>
+							<strong>Comentarios:</strong> {{ formReport.comment }}
 						</div>
-					</div><br>
-
-					<div v-if="formReport.communications.length > 0">
-						<strong>COMUNICACIÓN:</strong>
-						<div v-for="(communication, index) in formReport.communications" :key="`communication-div-${index}`">
-							- 📞 {{ communication.reason }} <span v-if="communication.comment.trim()">| {{ communication.comment }}</span>
-						</div>
-					</div><br>
-
-					<div v-if="formReport.pr_today.trim()">
-						<strong>PR's revisados hoy:</strong>
-						<div>- {{ formReport.pr_today }}</div>
-					</div><br>
-
-					<div v-if="formReport.pr_month.trim()">
-						<strong>PR's revisados del mes:</strong> {{ formReport.pr_month }}
-					</div><br>
-
-					<div v-if="formReport.comment.trim()">
-						<strong>Comentarios:</strong> {{ formReport.comment }}
-					</div>
+					</template>
 				</template>
 
 				<template v-slot:secondary-actions>
