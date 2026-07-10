@@ -189,7 +189,7 @@ onMounted(() => {
 
 								<v-expansion-panel-text class="pt-4">
 									<div v-if="formReport.communications.length === 0">
-										No se ha añadido una comunicación
+										No se ha añadido un contacto
 									</div>
 
 									<fieldset
@@ -197,7 +197,7 @@ onMounted(() => {
 										:key="`communication-key-${index}`"
 										class="pa-4 mt-4 rounded-lg position-relative"
 									>
-										<legend>Información de la Comunicación</legend>
+										<legend>Información del Contacto</legend>
 
 										<v-btn
 											class="position-absolute remove-task"
