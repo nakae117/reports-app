@@ -180,7 +180,7 @@ onMounted(() => {
 							<v-expansion-panel height="15">
 								<v-expansion-panel-title color="primary">
 									<template v-slot:default="{ expanded }">
-										Comunicaciones
+										Contactos
 										<v-spacer></v-spacer>
 
 										<v-btn v-if="expanded" icon="add" @click.stop="reportComposeStore.addCommunication" />
@@ -304,7 +304,7 @@ onMounted(() => {
 
 					<template v-if="formReport.communications.length > 0">
 						<div>
-							<strong>COMUNICACIÓN:</strong>
+							<strong>CONTACTO:</strong>
 							<div v-for="(communication, index) in formReport.communications" :key="`communication-div-${index}`">
 								- 📞 {{ communication.reason }} <span v-if="communication.comment.trim()">| {{ communication.comment }}</span>
 							</div>
