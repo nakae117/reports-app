@@ -1,8 +1,52 @@
+<script setup>
+import { ref } from 'vue';
+import { useNotifyStore } from "@/stores/notify";
+
+import { toRefs } from 'vue';
+
+const props = defineProps({
+	title: {
+		type: String,
+		default: "",
+	},
+	subTitle: {
+		type: String,
+		default: "",
+	},
+});
+
+const { title, subTitle } = toRefs(props);
+
+const notifyStore = useNotifyStore();
+
+const copyTextContainer = ref(null);
+
+const copyText = async () => {
+	if (copyTextContainer.value) {
+		try {
+			const text = copyTextContainer.value.$el;
+			const htmlBlob = new Blob([text.innerHTML], { type: "text/html" });
+			const textBlob = new Blob([text.innerText], { type: "text/plain" });
+			const data = [new ClipboardItem({
+				"text/html": htmlBlob,
+				"text/plain": textBlob,
+			})];
+
+			await navigator.clipboard.write(data);
+
+			notifyStore.showNotify("¡Copiado!");
+		} catch (err) {
+			console.error('Error al copiar el texto: ', err);
+		}
+	}
+}
+</script>
+
 <template>
 	<v-card class="mx-auto">
 		<v-card-item>
-			<v-card-title class="text-headline">Solicitud de Revisión</v-card-title>
-			<v-card-subtitle>Review Request</v-card-subtitle>
+			<v-card-title class="text-headline">{{ title }}</v-card-title>
+			<v-card-subtitle>{{ subTitle }}</v-card-subtitle>
 		</v-card-item>
 
 		<v-card-text class="py-4">
@@ -35,32 +79,3 @@
 		</v-card-actions>
 	</v-card>
 </template>
-
-<script setup>
-import { ref } from 'vue';
-import { useNotifyStore } from "@/stores/notify";
-
-const notifyStore = useNotifyStore();
-
-const copyTextContainer = ref(null);
-
-const copyText = async () => {
-	if (copyTextContainer.value) {
-		try {
-			const text = copyTextContainer.value.$el;
-			const htmlBlob = new Blob([text.innerHTML], { type: "text/html" });
-			const textBlob = new Blob([text.innerText], { type: "text/plain" });
-			const data = [new ClipboardItem({
-				"text/html": htmlBlob,
-				"text/plain": textBlob,
-			})];
-
-			await navigator.clipboard.write(data);
-
-			notifyStore.showNotify("¡Copiado!");
-		} catch (err) {
-			console.error('Error al copiar el texto: ', err);
-		}
-	}
-}
-</script>

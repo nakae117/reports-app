@@ -19,7 +19,54 @@ const date = computed(() => {
 });
 
 const statusIcons = ref(["🟢", "🔴", "🟠"]);
-const phases = ref(["🏗️ In progress", "🏗️ Pending", "🏗️ Closed", "🏗️ Testing", "🏗️ Ready for QA"]);
+const phases = ref([
+	{
+		name: "In progress",
+		icon: "🏗️",
+	},
+	{
+		name: "In review",
+		icon: "🧐",
+	},
+	{
+		name: "Pending",
+		icon: "⌛",
+	},
+	{
+		name: "Blocked",
+		icon: "🚧",
+	},
+	{
+		name: "Testing",
+		icon: "🧪",
+	},
+	{
+		name: "Ready for QA",
+		icon: "🧨",
+	},
+	{
+		name: "Accepted",
+		icon: "🚀",
+	},
+	{
+		name: "Closed",
+		icon: "✅",
+	},
+]);
+
+const progressRules = [
+	v => !!v || 'El progreso es requerido',
+	v => /^[0-9]+$/.test(v) || 'Solo se permiten números enteros',
+	v => (v >= 0 && v <= 100) || 'El valor debe estar entre 0 y 100'
+];
+
+const progressInput = (event) => {
+	let stringValue = String(event.key ?? '');
+
+	if (/^[\D]$/g.test(stringValue)) {
+		event.preventDefault();
+	}
+};
 
 onMounted(() => {
 	reportComposeStore.loadDraft();
@@ -29,7 +76,7 @@ onMounted(() => {
 <template>
 	<v-row justify="center">
 		<v-col cols="12" md="12">
-			<render-copy>
+			<render-copy title="Componer Reporte" sub-title="Reporte diario">
 				<template v-slot:form>
 					<div class="form-report-compose pr-4">
 						<v-expansion-panels rounded>
@@ -86,7 +133,22 @@ onMounted(() => {
 													label="Fase"
 													:items="phases"
 													hide-details
-												/>
+													item-title="name"
+													return-object
+												>
+													<template #selection="{ item }">
+														<span class="me-2">{{ item.icon }}</span>
+														<span>{{ item.name }}</span>
+													</template>
+
+													<template #item="{ props, item }">
+														<v-list-item v-bind="props">
+															<template #prepend>
+																<span class="me-2">{{ item.icon }}</span>
+															</template>
+														</v-list-item>
+													</template>
+												</v-select>
 											</v-col>
 
 											<v-col cols="2">
@@ -95,6 +157,9 @@ onMounted(() => {
 													label="Progreso (%)"
 													prepend-inner-icon="percent"
 													hide-details
+													maxlength="3"
+													:rules="progressRules"
+													@keydown="progressInput"
 												/>
 											</v-col>
 
@@ -125,7 +190,7 @@ onMounted(() => {
 								<v-expansion-panel-title color="primary">
 									<template v-slot:default="{ expanded }">
 										Reuniones
-										<v-spacer></v-spacer>
+										<v-spacer />
 
 										<v-btn v-if="expanded" icon="add" @click.stop="reportComposeStore.addMeeting" />
 									 </template>
@@ -181,7 +246,7 @@ onMounted(() => {
 								<v-expansion-panel-title color="primary">
 									<template v-slot:default="{ expanded }">
 										Contactos
-										<v-spacer></v-spacer>
+										<v-spacer />
 
 										<v-btn v-if="expanded" icon="add" @click.stop="reportComposeStore.addCommunication" />
 									 </template>
@@ -282,13 +347,13 @@ onMounted(() => {
 				</template>
 
 				<template v-slot:copiying>
-					<strong>Developer Daily Log</strong> 💻 <strong v-if="formConfig.user.trim()">{{ formConfig.user }}</strong><strong v-else class="text-grey">John Doe</strong> - {{ date }}<br><br>
+					<div><strong>Developer Daily Log</strong> 💻 <strong v-if="formConfig.user.trim()">{{ formConfig.user }}</strong><strong v-else class="text-grey">John Doe</strong> - {{ date }}</div><br>
 
 					<template v-if="formReport.tasks.length > 0">
 						<div>
 							<strong>TAREA:</strong>
 							<div v-for="(task, index) in formReport.tasks" :key="`task-div-${index}`">
-								- {{ task.code }} ➡️ Fase: {{ task.phase }} {{ task.progress }}% {{ task.status }} <span v-if="task.comment.trim()">| {{ task.comment }}</span>
+								- {{ task.code }} ➡️ Fase: {{ task?.phase?.icon }} {{ task?.phase?.name }} {{ task.progress }}% {{ task.status }} <span v-if="task.comment.trim()">| {{ task.comment }}</span>
 							</div>
 						</div><br>
 					</template>

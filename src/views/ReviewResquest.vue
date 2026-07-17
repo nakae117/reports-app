@@ -1,7 +1,29 @@
+<script setup>
+import { onMounted, ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useReviewRequestStore } from "@/stores/review-request";
+import RenderCopy from "@/components/misc/RenderCopy.vue";
+import TextView from "@/components/misc/TextView.vue";
+
+const reviewRequestStore = useReviewRequestStore();
+const { form } = storeToRefs(reviewRequestStore);
+
+const priorityOptions = ref([
+	{ text: "Baja", icon: "🟢" },
+	{ text: "Media", icon: "🟡" },
+	{ text: "Alta", icon: "🟠" },
+	{ text: "Urgente", icon: "🚨" }
+]);
+
+onMounted(() => {
+	reviewRequestStore.loadDraft();
+});
+</script>
+
 <template>
 	<v-row justify="center">
 		<v-col cols="12" md="8">
-			<render-copy>
+			<render-copy title="Solicitud de Revisión" sub-title="Review Request">
 				<template v-slot:form>
 					<v-text-field
 						v-model="form.comment"
@@ -35,7 +57,7 @@
 
 					<v-autocomplete
 						v-model="form.priority"
-						label="Autocomplete"
+						label="Prioridad"
 						:items="priorityOptions"
 						item-title="text"
 						return-object
@@ -67,25 +89,30 @@
 					
 					<div>{{ form.priority.icon }} {{ form.priority.text }}</div>
 				</template>
+
+				<template v-slot:secondary-actions>
+					<v-btn
+						class="text-grey-darken-3"
+						color="grey-lighten-2"
+						variant="elevated"
+						prepend-icon="save_as"
+						@click="reviewRequestStore.saveDraft"
+					>
+						Guardar borrador
+					</v-btn>
+				</template>
+
+				<template v-slot:actions>
+					<v-btn
+						color="red"
+						variant="elevated"
+						prepend-icon="close"
+						@click="reviewRequestStore.reset"
+					>
+						Limpiar
+					</v-btn>
+				</template>
 			</render-copy>
 		</v-col>
 	</v-row>
 </template>
-
-<script setup>
-import { storeToRefs } from 'pinia';
-import { useReviewRequestStore } from "@/stores/review-request";
-import RenderCopy from "@/components/misc/RenderCopy.vue";
-import TextView from "@/components/misc/TextView.vue";
-import { ref } from 'vue';
-
-const reviewRequestStore = useReviewRequestStore();
-const { form } = storeToRefs(reviewRequestStore);
-
-const priorityOptions = ref([
-	{ text: "Baja", icon: "🟢" },
-	{ text: "Media", icon: "🟡" },
-	{ text: "Alta", icon: "🟠" },
-	{ text: "Urgente", icon: "🚨" }
-]);
-</script>
